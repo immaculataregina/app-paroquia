@@ -1,7 +1,7 @@
 import '../../styles/global.css'
 import './styles.css'
 
-export function Home() {
+export default function Home() {
 
   return (
     <div className="Home">
