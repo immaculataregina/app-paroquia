@@ -23,6 +23,8 @@ export default function Login() {
 
   const { loading } = appState;
 
+  useEffect(() => appDispatch({ type: 'HANDLE_LOADING', loading: false }), []);
+
   const handleClickShowPassword = useCallback(() => setShowPassword(!showPassword), []);
 
   const handleInput = useCallback((e, key) => {

@@ -24,7 +24,7 @@ export default function Home() {
         icon: 'VolunteerActivism'
       },
       {
-        nome: 'Horários de Missa e Atendimento',
+        nome: 'Missa e Atendimentos',
         slug: 'horarios',
         icon: 'Church'
       },
@@ -33,8 +33,6 @@ export default function Home() {
     return (
       <>
         {modulesPermission.map(module => {
-          const CustomIcon = `${module.icon}`;
-
           return (
             <a 
               href="#"
@@ -53,7 +51,9 @@ export default function Home() {
                 {/* <CustomIcon /> */}
                 {createElement(Icons[module.icon])}
               </span>
-              <span>{module.nome}</span>
+              <span
+                style={{ fontSize: '3vmin' }}
+              >{module.nome}</span>
             </a>
           )
         }
@@ -64,7 +64,7 @@ export default function Home() {
 
   return (
     <div
-      style={{padding: theme.spacing(4), maxWidth: '900px', margin: '0 auto' }}
+      style={{padding: theme.spacing(1), maxWidth: '900px', margin: '0 auto' }}
     >
       <div
         style={{ position: 'absolute', top: '2vmin', right: 0 }}
@@ -82,8 +82,8 @@ export default function Home() {
         >
           <img alt src="https://cdn.pixabay.com/photo/2016/11/29/20/22/girl-1871104_1280.jpg" />
         </figure>
-        <p style={{ fontSize: '4vmin', fontWeight: 'bold', marginBottom: theme.spacing(1) }}>Olá, Gabriel</p>
-        <span style={{ fontSize: '2vmin', fontStyle: 'italic'}}>Que a paz de Nosso Senhor esteja com você!</span>
+        <p style={{ fontSize: '5vmin', fontWeight: 'bold', marginBottom: theme.spacing(1) }}>Olá, Gabriel</p>
+        <span style={{ fontSize: '2.5vmin', fontStyle: 'italic'}}>Que a paz de Nosso Senhor esteja com você!</span>
       </header>
 
       {/* Navigation */}
