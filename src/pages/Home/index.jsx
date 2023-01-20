@@ -101,7 +101,15 @@ export default function Home() {
           }}
           onClick={() => appDispatch({ type: 'HANDLE_DIALOG', dialog: 1 })}
         >
-          <img alt src={storageImage || "https://cdn.pixabay.com/photo/2016/11/29/20/22/girl-1871104_1280.jpg"} />
+          {storageImage ? (
+            <img alt src={storageImage} />
+          ) : (
+            <span
+              style={{
+                display: 'flex', alignItems: 'center', backgroundColor: '#CCC'
+              }}
+            >Clique aqui para definir sua foto de perfil</span>
+          )}
         </figure>
         <p style={{ fontSize: '5vmin', fontWeight: 'bold', marginBottom: theme.spacing(1) }}>Olá, Gabriel</p>
         <span style={{ fontSize: '2.5vmin', fontStyle: 'italic'}}>Que a paz de Nosso Senhor esteja com você!</span>
