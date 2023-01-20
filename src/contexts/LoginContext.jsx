@@ -67,6 +67,7 @@ export function LoginContextProvider({ children }) {
       appDispatch({ type: 'HANDLE_LOGIN', isSignedIn: false })
       appDispatch({ type: 'HANDLE_ALERT', alert: 1 });
       loginDispatch({ type: 'LOGOUT', loginState: user });
+      appDispatch({ type: 'HANDLE_LOADING', loading: false });
     }
   }, [])
 
