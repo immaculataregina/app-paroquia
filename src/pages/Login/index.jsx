@@ -1,20 +1,27 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useCallback, useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, TextField, InputAdornment, IconButton } from '@mui/material';
-import MuiSnackbar from '../../components/MuiSnackbar';
+// import MuiSnackbar from '../../components/MuiSnackbar';
 
 import { theme } from '../../App';
 
 import LogoImmaculata from '../../static/img/logo-Immaculata.png';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { api } from '../../services/api';
+import { AppContext } from '../../contexts/AppContext';
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  const { appState, appDispatch } = useContext(AppContext);
+
+  console.log(appState);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [trigger, setTrigger] = useState(0);
+  // const [trigger, setTrigger] = useState(0);
 
+  const { loading } = appState;
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleInput = (e, key) => {
@@ -30,9 +37,20 @@ export default function Login() {
     return;
   }
 
+  const login = useCallback(async (e ) => {
+    e.preventDefault();
+
+    const response = await api.autenticacao.loginUser(email, password);
+    if (response.result) {
+      navigate("/home");
+    }
+  }, [email, password]);
+
+  console.log('LOADING: ', loading);
+
   return (
     <div
-      style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', padding: theme.spacing(8) }}
+      style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', padding: theme.spacing(8), height: '100vh' }}
     >
       <header
         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
@@ -43,9 +61,10 @@ export default function Login() {
           style={{ width: '140px', marginBottom: theme.spacing(4), borderRadius: 100}}  
         />
       </header>
-      <MuiSnackbar message={"Login Inválido"} type={"error"} trigger={trigger} />
+      {/* <MuiSnackbar message={"Login Inválido"} type={"error"} trigger={trigger} /> */}
       <form
         style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: '0 auto', padding: theme.spacing(1), width: '100%' }}
+        onSubmit={login}
       >
         <TextField 
           color="primary"
@@ -86,13 +105,13 @@ export default function Login() {
         >{loading ? 'Entrando...' : 'Entrar'}</Button>
       </form>
 
-      <div style={{ marginTop: theme.spacing(10)}}>
+      <div style={{ margin: `${theme.spacing(10)} 0`}}>
         <span>
           Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
         </span>
       </div>
 
-      <footer style={{ position: 'absolute', bottom: theme.spacing(1), fontSize: theme.spacing(1.5), opacity: 0.6 }}>{new Date().getFullYear()} - Immaculata | v1.0.0</footer>
+      <footer style={{ fontSize: theme.spacing(1.5), opacity: 0.6, marginTop: 'auto' }}>{new Date().getFullYear()} - Immaculata | v1.0.0</footer>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import AppRoutes from "./routes";
 import './styles/global.css';
+import { AppContextProvider } from "./contexts/AppContext";
 
 export const theme = createTheme({
   palette: {
@@ -16,9 +17,11 @@ export const theme = createTheme({
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <AppRoutes />
-      </Router>
+      <AppContextProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </AppContextProvider>
     </ThemeProvider>
   )
 }
