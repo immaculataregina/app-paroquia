@@ -5,7 +5,8 @@ const initialValue = {
   appState: {
     schema: 'immaculata',
     loading: false,
-    alert: false
+    alert: 0,
+    isSignedIn: false,
   },
   appDispatch: (value) => {},
 }
@@ -28,6 +29,11 @@ const appReducer = (state, action) => {
       return {
         ...state,
         alert: action.alert
+      }
+    case 'HANDLE_LOGIN':
+      return {
+        ...state,
+        isSignedIn: action.isSignedIn
       }
   }
 }

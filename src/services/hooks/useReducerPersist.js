@@ -5,15 +5,15 @@ export default function useReducerPersist(key, reducer, initialArg) {
     reducer,
     initialArg,
     (initialState) => {
-      const valueStorage = localStorage.getItem(key);
+      const valueStorage = sessionStorage.getItem(key);
       const value = valueStorage ? JSON.parse(valueStorage) : initialState;
 
       return { ...initialState, ...value };
-    }
+    },
   );
 
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state));
+    sessionStorage.setItem(key, JSON.stringify(state));
   }, [key, state]);
 
   return [state, dispatch];

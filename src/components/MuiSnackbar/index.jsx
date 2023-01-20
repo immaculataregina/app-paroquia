@@ -1,14 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Alert, Snackbar, Stack } from '@mui/material';
+import { AppContext } from '../../contexts/AppContext';
 
 export default function MuiSnackbar(props) {
   const [open, setOpen] = useState(false);
 
+  const { appState, appDispatch } = useContext(AppContext);
+
   useEffect(() => {
-    if (props.trigger) {
+    if (appState.alert) {
       handleClick();
     }
-  }, [props.trigger]);
+  }, [appState, appState.alert]);
 
   const handleClick = () => {
     setOpen(true);
@@ -16,6 +19,7 @@ export default function MuiSnackbar(props) {
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
+      appDispatch({ type: 'HANDLE_ALERT', alert: 0 });
       return;
     }
 
