@@ -1,15 +1,35 @@
-import { createElement, useContext, useMemo } from 'react';
+import { createElement, useCallback, useContext, useMemo, useState } from 'react';
 
 import { Button } from '@mui/material';
-import { Notifications, VolunteerActivism, Church } from '@mui/icons-material';
 import * as Icons from '@mui/icons-material';
 
+import Avatar from 'react-avatar-edit';
 
 import { theme } from '../../App';
 import { LoginContext } from '../../contexts/LoginContext';
+import MuiDialog from '../../components/MuiDialog';
+import { AppContext } from '../../contexts/AppContext';
 
 export default function Home() {
   const { logout } = useContext(LoginContext);
+  const { appDispatch } = useContext(AppContext);
+
+  const [imageCrop, setImageCrop] = useState(false);
+
+  const [storageImage, setStorageImage] = useState();
+
+  const saveImage = useCallback(() => {
+    setStorageImage(imageCrop);
+    appDispatch({ type: 'HANDLE_DIALOG', dialog: 0 });
+  }, [appDispatch, imageCrop]);
+
+  const onClose = useCallback(() => {
+    setImageCrop(null)
+  }, []);
+
+  const onCrop = useCallback((preview) => {
+    setImageCrop(preview)
+  }, []);
 
   const modules = useMemo(() => {
     const modulesPermission = [
@@ -77,10 +97,11 @@ export default function Home() {
         <figure
           style={{ 
             display: 'flex', width: '45vmin', maxWidth: '250px', height: '45vmin', maxHeight: '250px', borderRadius: '50%', overflow: 'hidden',
-            margin: theme.spacing(2)
+            margin: theme.spacing(2), cursor: 'pointer'
           }}
+          onClick={() => appDispatch({ type: 'HANDLE_DIALOG', dialog: 1 })}
         >
-          <img alt src="https://cdn.pixabay.com/photo/2016/11/29/20/22/girl-1871104_1280.jpg" />
+          <img alt src={storageImage || "https://cdn.pixabay.com/photo/2016/11/29/20/22/girl-1871104_1280.jpg"} />
         </figure>
         <p style={{ fontSize: '5vmin', fontWeight: 'bold', marginBottom: theme.spacing(1) }}>Olá, Gabriel</p>
         <span style={{ fontSize: '2.5vmin', fontStyle: 'italic'}}>Que a paz de Nosso Senhor esteja com você!</span>
@@ -99,6 +120,22 @@ export default function Home() {
       >
         {modules}
       </div>
+
+      <MuiDialog 
+        title="Escolha sua foto de perfil"
+        children={
+          <>
+            <Avatar 
+              width={390}
+              height={295}
+              onCrop={onCrop}
+              onClose={onClose}
+              // src={imageCrop.src}
+            />
+            <Button onClick={saveImage}>Salvar</Button>
+          </>
+        }
+      />
     </div>
   )
 }
