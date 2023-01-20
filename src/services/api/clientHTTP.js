@@ -9,7 +9,7 @@ const api = axios.create({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'DELETE, POST, PUT, GET, OPTIONS',
     'Access-Control-Max-Age': 86400
-  }
+  },
 });
 
 api.interceptors.request.use(config => {
@@ -21,7 +21,7 @@ api.interceptors.request.use(config => {
   return config;
 })
 
-export const request = async (url, method, body) => {
+export const request = async (method, url, body) => {
   try {
     const response = await api({
       method,
