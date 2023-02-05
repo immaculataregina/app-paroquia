@@ -1,10 +1,10 @@
-import { BrowserRouter as Router } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import AppRoutes from "./routes";
 import './styles/global.css';
 import { AppContextProvider } from "./contexts/AppContext";
 import { LoginContextProvider } from "./contexts/LoginContext";
+import { RegisterContextProvider } from './contexts/RegisterContext';
 
 export const theme = createTheme({
   palette: {
@@ -20,9 +20,9 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <AppContextProvider>
         <LoginContextProvider>
-          <Router>
+          <RegisterContextProvider>
             <AppRoutes />
-          </Router>
+          </RegisterContextProvider>
         </LoginContextProvider>
       </AppContextProvider>
     </ThemeProvider>

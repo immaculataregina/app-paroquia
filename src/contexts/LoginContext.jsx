@@ -47,7 +47,6 @@ export function LoginContextProvider({ children }) {
     appDispatch({ type: 'HANDLE_LOADING', loading: true });
 
     const response = await api.autenticacao.loginUser(email, password);
-
     if (response.result) {
       const user = {
         apelido: '',
@@ -64,10 +63,11 @@ export function LoginContextProvider({ children }) {
     }
 
     if (response.errorCode) {
+      console.log('entrei');
       appDispatch({ type: 'HANDLE_LOGIN', isSignedIn: false })
       appDispatch({ type: 'HANDLE_ALERT', alert: 1 });
-      loginDispatch({ type: 'LOGOUT', loginState: user });
       appDispatch({ type: 'HANDLE_LOADING', loading: false });
+      loginDispatch({ type: 'LOGOUT' });
     }
   }, [])
 

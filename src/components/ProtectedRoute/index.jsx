@@ -1,12 +1,19 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 
-function ProtectedRoute({ isSignedIn, children }) {
-
-  if (!isSignedIn) {
-    return <Navigate to="/" replace />
-  }
-  return children;
+function ProtectedRoute({ component: Component, isSignedIn, ...rest }) {
+  return (
+    <Route 
+      {...rest}
+      render={props => 
+        isSignedIn ? (
+          <Component {...props} />
+        ) : (
+          <Redirect push to={{ pathname: '/', state: { from: props.location }}} />
+        )
+      }
+    />
+  )
 }
 
 export default ProtectedRoute;

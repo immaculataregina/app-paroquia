@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, TextField, InputAdornment, IconButton } from '@mui/material';
 import MuiSnackbar from '../../components/MuiSnackbar';
 
@@ -10,9 +10,10 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { AppContext } from '../../contexts/AppContext';
 import { LoginContext } from '../../contexts/LoginContext';
+import useRouter from '../../services/hooks/useRouter';
 
 export default function Login() {
-  const navigate = useNavigate();
+  const navigate = useRouter();
 
   const { appState, appDispatch } = useContext(AppContext);
   const { login } = useContext(LoginContext);
@@ -23,7 +24,10 @@ export default function Login() {
 
   const { loading } = appState;
 
-  useEffect(() => appDispatch({ type: 'HANDLE_LOADING', loading: false }), []);
+  useEffect(() => {
+    appDispatch({ type: 'HANDLE_LOADING', loading: false })
+    appDispatch({ type: 'HANDLE_ALERT', alert: 0 });
+  }, []);
 
   const handleClickShowPassword = useCallback(() => setShowPassword(!showPassword), []);
 
@@ -44,10 +48,10 @@ export default function Login() {
     e.preventDefault();
     
     const response = await login(email, password);
-
     if (response.login) {
-      navigate("/home");
-    }
+      navigate.push('/home');
+      }
+    appDispatch({ type: 'HANDLE_LOADING', loading: false });
   }, [email, password, appState]);
 
   return (
@@ -109,7 +113,7 @@ export default function Login() {
 
       <div style={{ margin: `${theme.spacing(10)} 0`}}>
         <span>
-          Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
+          Não tem uma conta? <Link to={'/cadastro/cpf'}>Cadastre-se</Link>
         </span>
       </div>
 
