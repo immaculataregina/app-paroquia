@@ -1,13 +1,16 @@
-import { Checkbox, FormControlLabel, TextField } from "@mui/material";
-import { memo, useCallback, useContext, useState } from "react";
-import { RegisterContext } from "../../../../contexts/RegisterContext";
-import InputMask from 'react-input-mask';
+import { TextField } from "@mui/material";
+import { memo, useCallback, useContext, useState, useEffect } from "react";
+import { RegisterContext } from "../../../../../contexts/RegisterContext";
 
 function Email() {
   const { registerState, registerDispatch } = useContext(RegisterContext);
   const [stepValid, setStepValid] = useState(null);
 
-  const value = registerState.email;
+  const value = registerState.contato.email;
+
+  useEffect(() => {
+    isValid(value);
+  }, []);
 
   const isValid = useCallback((value) => {
     const regex = /^[a-z0-9._-]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?(\.[a-z]+)?$/;

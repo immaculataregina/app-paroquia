@@ -10,8 +10,7 @@ export const loginUser = async (email, password) => {
   }
 
   try {
-    const response = await request('post', urlAutenticacao, body);
-    return response;
+    return await request('post', urlAutenticacao, body);
   } catch (error) {
     return error;
   }

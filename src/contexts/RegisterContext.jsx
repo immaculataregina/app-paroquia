@@ -6,22 +6,44 @@ import { AppContext } from './AppContext';
 const initialValue = {
   registerState: {
     stepValid: false,
-    cpf: '',
-    nome: '',
-    nascimento: '',
-    celular: {
-      numero: '',
-      whatsapp: true
+    dados :{
+      cpf: '',
+      nomeCompleto: '',
+      apelido: '',
+      idPerfilPessoa: 1,
+      dtNascimento: '',
+      idEstadoCivil: 1, // 1 ou 2
+      filhos: null, // se não tem mandar 0
+      idSexo: null, // 1 ou 2
+      idProfissao: null,
+      idGrauInstrucao: null,
+      idFormacao: null 
     },
-    email: '',
     endereco: {
       cep: '',
       estado: '',
       cidade: '',
+      idCidade: '',
       bairro: '',
       logradouro: '',
       numero: '',
       complemento: ''
+    },
+    vinculo: {
+      idPastoral: null
+    },
+    contato : {
+      celular: '',
+      whatsapp: true,
+      email: '',
+    },
+    usuario: {
+      senha: '',
+      idsFuncionalidades: {},
+    },
+    termo: {
+      idTermo: 1,
+      aceito: true
     }
   },
   registerDispatch: (value) => {},
@@ -39,31 +61,82 @@ const registerReducer = (state, action) => {
     case 'HANDLE_CPF':
       return {
         ...state,
-        cpf: action.cpf
+        dados: {
+          ...state.dados,
+          cpf: action.cpf
+        }
       }
     case 'HANDLE_NAME':
       return {
         ...state,
-        nome: action.name
+        dados: {
+          ...state.dados,
+          nomeCompleto: action.name
+        }
+      }
+    case 'HANDLE_SURNAME':
+      return {
+        ...state,
+        dados: {
+          ...state.dados,
+          apelido: action.surname
+        }
       }
     case 'HANDLE_BIRTHDAY':
       return {
         ...state,
-        nascimento: action.birthday
-      }
-    case 'HANDLE_PHONE':
-      return {
-        ...state,
-        celular: {
-          ...state.celular,
-          numero: action.number,
-          whatsapp: action.whatsapp
+        dados: {
+          ...state.dados,
+          dtNascimento: action.birthday
         }
       }
-    case 'HANDLE_EMAIL':
+    case 'HANDLE_MARRIAGE':
       return {
         ...state,
-        email: action.email
+        dados: {
+          ...state.dados,
+          idEstadoCivil: action.idEstadoCivil
+        }
+      }
+    case 'HANDLE_CHILDREN':
+      return {
+        ...state,
+        dados: {
+          ...state.dados,
+          filhos: action.filhos
+        }
+      }
+    case 'HANDLE_SEX':
+      return {
+        ...state,
+        dados: {
+          ...state.dados,
+          idSexo: action.idSexo
+        }
+      }
+    case 'HANDLE_PROFESSION':
+      return {
+        ...state,
+        dados: {
+          ...state.dados,
+          idProfissao: action.idProfissao
+        }
+      }
+    case 'HANDLE_LEVEL_OF_EDUCATION':
+      return {
+        ...state,
+        dados: {
+          ...state.dados,
+          idGrauInstrucao: action.idGrauInstrucao
+        }
+      }
+    case 'HANDLE_TRAINING':
+      return {
+        ...state,
+        dados: {
+          ...state.dados,
+          idFormacao: action.idFormacao
+        }
       }
     case 'HANDLE_ADDRESS':
       return {
@@ -77,6 +150,39 @@ const registerReducer = (state, action) => {
           logradouro: action.logradouro,
           numero: action.numero,
           complemento: action.complemento
+        }
+      }
+    case 'HANDLE_PHONE':
+      return {
+        ...state,
+        contato: {
+          ...state.contato,
+          celular: action.number,
+          whatsapp: action.whatsapp
+        }
+      }
+    case 'HANDLE_EMAIL':
+      return {
+        ...state,
+        contato: {
+          ...state.contato,
+          email: action.email
+        }
+      }
+    case 'HANDLE_USER':
+      return {
+        ...state,
+        usuario: {
+          ...state.usuario,
+          senha: action.password
+        }
+      }
+    case 'HANDLE_TERM':
+      return {
+        ...state,
+        termo: {
+          ...state.termo,
+          aceito: action.term
         }
       }
     case 'RESET':
@@ -99,7 +205,6 @@ export function RegisterContextProvider({ children }) {
     if (lastCep === cep) return;
     appDispatch({ type: 'HANDLE_LOADING', loading: true });
     const response = await api.endereco.searchAddressByCep(cep);
-    console.log(response);
 
     if (response.status === 200) {
       lastCep = response.data.cep;
@@ -116,12 +221,36 @@ export function RegisterContextProvider({ children }) {
     appDispatch({ type: 'HANDLE_LOADING', loading: false });
   }, [registerState]);
 
+  const verifyCpf = useCallback(async (cpf) => {
+    appDispatch({ type: 'HANDLE_LOADING', loading: true });
+    await api.pessoas.verifyCpf(cpf);
+    appDispatch({ type: 'HANDLE_LOADING', loading: false });
+  }, []);
+
+  const signUpUser = useCallback(async () => {
+    appDispatch({ type: 'HANDLE_LOADING', loading: true });
+    
+    const body = {
+      dados: registerState.dados,
+      endereco: registerState.endereco,
+      vinculo: registerState.vinculo,
+      contato: registerState.contato,
+      usuario: registerState.usuario,
+      termo: registerState.termo
+    }
+    
+    await api.pessoas.signUpUser(body);
+    appDispatch({ type: 'HANDLE_LOADING', loading: false });
+  })
+
   return (
     <RegisterContext.Provider
       value={{
         registerState,
         registerDispatch,
-        searchAddress
+        searchAddress,
+        verifyCpf,
+        signUpUser
       }}
     >
       {children}

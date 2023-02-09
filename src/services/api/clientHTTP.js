@@ -1,25 +1,25 @@
 import axios from 'axios';
+import { CONFIG } from '../config';
 
-const getToken = () => true;
-
+// const getToken = () => true;
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_AUTENTICACAO,
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'DELETE, POST, PUT, GET, OPTIONS',
-    'Access-Control-Max-Age': 86400
+    'Access-Control-Max-Age': 86400,
+    schema: CONFIG.SCHEMA
   },
 });
 
-api.interceptors.request.use(config => {
-  const token = getToken();
-  if (token) {
-    config.headers['x-access-token'] = token;
-  }
+// api.interceptors.request.use(config => {
+//   const token = getToken();
+//   if (token) {
+//     config.headers['x-access-token'] = token;
+//   }
 
-  return config;
-})
+//   return config;
+// })
 
 export const request = async (method, url, body) => {
   try {

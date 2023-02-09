@@ -1,13 +1,17 @@
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
-import { memo, useCallback, useContext, useState } from "react";
-import { RegisterContext } from "../../../../contexts/RegisterContext";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
+import { RegisterContext } from "../../../../../contexts/RegisterContext";
 import InputMask from 'react-input-mask';
 
 function Phone() {
   const { registerState, registerDispatch } = useContext(RegisterContext);
   const [stepValid, setStepValid] = useState(null);
 
-  const value = registerState.celular;
+  const value = registerState.contato;
+
+  useEffect(() => {
+    isValid(value.celular);
+  }, []);
 
   const isValid = useCallback((value) => {
     const regex = /\([1-9][0-9]\)\s?[9]?\s?\d{4}([\s-])?\d{4}/;
@@ -23,8 +27,7 @@ function Phone() {
   }, [value]);
 
   const handleWhatsapp = useCallback((event) => {
-    console.log(value);
-    registerDispatch({ type: 'HANDLE_PHONE', number: value.numero, whatsapp: event.target.checked });
+    registerDispatch({ type: 'HANDLE_PHONE', number: value.celular, whatsapp: event.target.checked });
   }, [value]);
 
 
@@ -37,7 +40,7 @@ function Phone() {
         mask='(99) 99999-9999'
         maskChar=' '
         error={stepValid !== null && !stepValid}
-        value={value.numero || ''}
+        value={value.celular || ''}
         onChange={handleInput}>
         {(inputProps) => <TextField {...inputProps}/>}
       </InputMask>

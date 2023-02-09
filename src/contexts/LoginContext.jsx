@@ -63,7 +63,6 @@ export function LoginContextProvider({ children }) {
     }
 
     if (response.errorCode) {
-      console.log('entrei');
       appDispatch({ type: 'HANDLE_LOGIN', isSignedIn: false })
       appDispatch({ type: 'HANDLE_ALERT', alert: 1 });
       appDispatch({ type: 'HANDLE_LOADING', loading: false });

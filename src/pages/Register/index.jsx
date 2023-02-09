@@ -8,27 +8,29 @@ import { Button, IconButton, Typography } from '@mui/material';
 import { theme } from '../../App';
 import { ArrowBack } from '@mui/icons-material';
 import { RegisterContext } from '../../contexts/RegisterContext';
-import CPF from './Fields/CPF';
-import Name from './Fields/Name';
-import Birthday from './Fields/Birthday';
-import Phone from './Fields/Phone';
-import Email from './Fields/Email';
+import { CPF, Name, Surname, Birthday, CivilState, Sex } from './Fields/Data';
+import { Phone, Email } from './Fields/Contact';
+import Password from './Fields/Password';
 import Address from './Fields/Address';
 
 function Register () {
   const router = useRouter();
   const { match, history } = router;
-  const { registerState } = useContext(RegisterContext);
+  const { registerState, verifyCpf, signUpUser } = useContext(RegisterContext);
 
   const uri = history.location.pathname;
 
   const steps = useMemo(() => ([
-    { path: `${match.path}/cpf`, component: CPF },
+    { path: `${match.path}/cpf`, component: CPF, verificaCpf: true },
     { path: `${match.path}/nome`, component: Name },
-    { path: `${match.path}/data-nascimento`, component: Birthday},
-    { path: `${match.path}/celular`, component: Phone},
-    { path: `${match.path}/email`, component: Email},
-    { path: `${match.path}/endereco`, component: Address},
+    { path: `${match.path}/apelido`, component: Surname },
+    { path: `${match.path}/data-nascimento`, component: Birthday },
+    { path: `${match.path}/estado-civil`, component: CivilState },
+    { path: `${match.path}/sexo`, component: Sex },
+    { path: `${match.path}/celular`, component: Phone },
+    { path: `${match.path}/email`, component: Email },
+    { path: `${match.path}/senha`, component: Password },
+    { path: `${match.path}/endereco`, component: Address, cadastro: true },
   ]), [match.path]);
 
   const currentStep = useCallback(() => {
@@ -51,9 +53,22 @@ function Register () {
 
   const [currentPositionStep, setCurrentPositionStep] = useState(0);
 
-  const goToNextStep = () => {
-    if (currentPositionStep === steps.length -1) return;
+  const goToNextStep = async () => {
+    let validCpf = false;
+    if (currentPositionStep === steps.length -1) {
+      await signUpUser(registerState.dados.cpf);
+      history.push("/?cadastro");
+      return;
+    };
+
+    if (steps[currentPositionStep].verificaCpf) {
+      validCpf = await verifyCpf(registerState.dados.cpf);
+      if(!validCpf)
+        return;
+    }
+    
     const stepPosition = (currentPositionStep + 1);
+
     const nextStepUrl = steps[stepPosition].path;
     setCurrentPositionStep(stepPosition);
     history.push(nextStepUrl);

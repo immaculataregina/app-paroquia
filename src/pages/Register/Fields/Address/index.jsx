@@ -6,7 +6,7 @@ import InputMask from "react-input-mask";
 import { firstLetterUpper } from '../../../../services/firstLetterUpper.js';
 
 function Address() {
-  const { appState, appDispatch } = useContext(AppContext);
+  const { appState } = useContext(AppContext);
   const { registerState, registerDispatch, searchAddress } = useContext(RegisterContext);
   const [stepValid, setStepValid] = useState({
     cep: null,
@@ -38,9 +38,9 @@ function Address() {
 
     const result = (regex[attr] || /./).test(value);
     stepValid[attr] = (value === null ? null : result);
-    
+
     if (attr === 'cep' && stepValid[attr] && !value.cidade) {
-      getAddressByCep();
+      getAddressByCep(value);
     }
     setStepValid(stepValid);
   }, [stepValid]);
@@ -61,9 +61,8 @@ function Address() {
     if (attr === 'state') value[attr] = newValue;
     else value[attr] = firstLetterUpper(newValue)
     isValid(attr, newValue);
-    
     registerDispatch({ type: 'HANDLE_ADDRESS', ...value });
-  }, []);
+  }, [value]);
 
   const clearFields = useCallback((fields = []) => {
     fields.map(field => {
@@ -108,10 +107,10 @@ function Address() {
     );
   }, []);
 
-  const getAddressByCep = useCallback(async () => {
+  const getAddressByCep = useCallback(async (cep) => {
     if(stepValid.cep === null || stepValid === false) return;
-    await searchAddress(value.cep);
-  }, []);
+    await searchAddress(cep);
+  }, [value]);
 
   return (
     <>
@@ -140,8 +139,7 @@ function Address() {
         fullWidth
         select
         label="Estado"
-        disabled={appState.loading}
-        error={stepValid.estado !== null && !stepValid.estado}
+        disabled
         value={value.estado || ''}
         onChange={event => {
           handleInput('state', event);
@@ -153,8 +151,7 @@ function Address() {
         style={{ marginTop: '24px' }}
         fullWidth
         label="Cidade"
-        disabled={appState.loading}
-        error={stepValid.cidade !== null && !stepValid.cidade}
+        disabled
         value={value.cidade || ''}
         onChange={event => {
           handleInput('cidade', event);
@@ -164,8 +161,7 @@ function Address() {
         style={{ marginTop: '24px' }}
         fullWidth
         label="Bairro"
-        disabled={appState.loading}
-        error={stepValid.bairro !== null && !stepValid.bairro}
+        disabled
         value={value.bairro || ''}
         onChange={event => {
           handleInput('bairro', event);
@@ -175,9 +171,8 @@ function Address() {
         style={{ marginTop: '24px' }}
         fullWidth
         label="Logradouro"
-        disabled={appState.loading}
+        disabled
         placeholder="Rua, Avenida, Alameda..."
-        error={stepValid.logradouro !== null && !stepValid.logradouro}
         value={value.logradouro || ''}
         onChange={event => {
           handleInput('logradouro', event);
@@ -188,7 +183,6 @@ function Address() {
         fullWidth
         label="Número"
         disabled={appState.loading}
-        error={stepValid.numero !== null && !stepValid.numero}
         value={value.numero || ''}
         onChange={event => {
           handleInput('numero', event);

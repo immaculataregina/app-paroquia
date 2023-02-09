@@ -1,17 +1,17 @@
 import { TextField } from "@mui/material";
 import InputMask from 'react-input-mask';
 import { memo, useCallback, useContext, useState, useMemo } from "react";
-import { RegisterContext } from "../../../../contexts/RegisterContext";
+import { RegisterContext } from "../../../../../contexts/RegisterContext";
 
 function Birthday() {
   const { registerState, registerDispatch } = useContext(RegisterContext);
   const [stepValid, setStepValid] = useState(null);
 
   const value = useMemo(() => {
-    if (registerState.nascimento) {
-      const ano = registerState.nascimento.split('-')[0];
-      const mes = registerState.nascimento.split('-')[1];
-      const dia = registerState.nascimento.split('-')[2];
+    if (registerState.dados.dtNascimento) {
+      const ano = registerState.dados.dtNascimento.split('-')[0];
+      const mes = registerState.dados.dtNascimento.split('-')[1];
+      const dia = registerState.dados.dtNascimento.split('-')[2];
 
       return `${dia}/${mes}/${ano}`;
     }

@@ -1,4 +1,3 @@
-import { request } from "../clientHTTP";
 import axios from 'axios';
 
 export const searchAddressByCep = async (cep) => {

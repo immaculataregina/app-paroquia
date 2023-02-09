@@ -1,14 +1,14 @@
 import { TextField } from "@mui/material";
 import { memo, useCallback, useContext, useState } from "react";
 import InputMask from 'react-input-mask';
-import { RegisterContext } from "../../../../contexts/RegisterContext";
+import { RegisterContext } from "../../../../../contexts/RegisterContext";
 import { isValid } from 'cpf';
 
 function CPF() {
   const { registerState, registerDispatch } = useContext(RegisterContext);
   const [stepValid, setStepValid] = useState(null);
 
-  const value = registerState.cpf;
+  const value = registerState.dados.cpf;
 
   const cpfIsValid = useCallback((value) => {
     const result = isValid(value);

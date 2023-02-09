@@ -13,7 +13,7 @@ import { LoginContext } from '../../contexts/LoginContext';
 import useRouter from '../../services/hooks/useRouter';
 
 export default function Login() {
-  const navigate = useRouter();
+  const { history, location} = useRouter();
 
   const { appState, appDispatch } = useContext(AppContext);
   const { login } = useContext(LoginContext);
@@ -21,12 +21,19 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState('error');
 
   const { loading } = appState;
 
   useEffect(() => {
     appDispatch({ type: 'HANDLE_LOADING', loading: false })
     appDispatch({ type: 'HANDLE_ALERT', alert: 0 });
+    if (location.search) {
+      appDispatch({ type: 'HANDLE_ALERT', alert: 1 });
+      setAlertMessage('Cadastro concluído com sucesso');
+      setAlertType('success');
+    }
   }, []);
 
   const handleClickShowPassword = useCallback(() => setShowPassword(!showPassword), []);
@@ -47,10 +54,11 @@ export default function Login() {
   const handleLogin = useCallback(async (e) => {
     e.preventDefault();
     
+    setAlertMessage('Login Inválido');
+    setAlertType('error');
+
     const response = await login(email, password);
-    if (response.login) {
-      navigate.push('/home');
-      }
+    if (response.login) history.push('/home');
     appDispatch({ type: 'HANDLE_LOADING', loading: false });
   }, [email, password, appState]);
 
@@ -67,7 +75,7 @@ export default function Login() {
           style={{ width: '140px', marginBottom: theme.spacing(4), borderRadius: 100}}  
         />
       </header>
-      <MuiSnackbar message="Login Inválido" type="error" />
+      <MuiSnackbar message={alertMessage} type={alertType} />
       <form
         style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: '0 auto', padding: theme.spacing(1), width: '100%' }}
         onSubmit={handleLogin}
