@@ -8,6 +8,7 @@ import { Button, IconButton, Typography } from '@mui/material';
 import { theme } from '../../App';
 import { ArrowBack } from '@mui/icons-material';
 import { RegisterContext } from '../../contexts/RegisterContext';
+import { AppContext } from '../../contexts/AppContext';
 import { CPF, Name, Surname, Birthday, CivilState, Sex } from './Fields/Data';
 import { Phone, Email } from './Fields/Contact';
 import Password from './Fields/Password';
@@ -16,6 +17,7 @@ import Address from './Fields/Address';
 function Register () {
   const router = useRouter();
   const { match, history } = router;
+  const { appState } = useContext(AppContext);
   const { registerState, verifyCpf, signUpUser } = useContext(RegisterContext);
 
   const uri = history.location.pathname;
@@ -108,7 +110,7 @@ function Register () {
             <Route path={currentStep().path} exact>
               {steps.map((step) => <RouteWithSubRoutes key={step.path} {...step} />)}
               <Button
-                disabled={registerState.stepValid !== true}
+                disabled={registerState.stepValid !== true || appState.loading}
                 size="large"
                 variant="contained"
                 color="primary"
