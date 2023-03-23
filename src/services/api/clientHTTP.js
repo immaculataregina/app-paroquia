@@ -8,6 +8,7 @@ const api = axios.create({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'DELETE, POST, PUT, GET, OPTIONS',
     'Access-Control-Max-Age': 86400,
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
     schema: CONFIG.SCHEMA
   },
 });

@@ -58,7 +58,10 @@ export default function Login() {
     setAlertType('error');
 
     const response = await login(email, password);
-    if (response.login) history.push('/home');
+    if (response.login) {
+      console.log('entrei');
+      history.push('/home');
+    }
     appDispatch({ type: 'HANDLE_LOADING', loading: false });
   }, [email, password, appState]);
 

@@ -10,6 +10,10 @@ const initialValue = {
     email: '',
     uid: '',
     apiKey: '',
+    foto: '',
+    dizimista: '',
+    id_pessoa: '',
+    itens_menu: []
   },
   loginDispatch: (value) => {},
 }
@@ -20,8 +24,7 @@ const loginReducer = (state, action) => {
   switch(action.type) {
     case 'LOGIN':
       return {
-        ...state,
-        loginState: {...action.loginState}
+        ...action.loginState
       }
     case 'LOGOUT':
       return initialValue
@@ -47,13 +50,18 @@ export function LoginContextProvider({ children }) {
     appDispatch({ type: 'HANDLE_LOADING', loading: true });
 
     const response = await api.autenticacao.loginUser(email, password);
+
     if (response.result) {
       const user = {
-        apelido: '',
+        apelido: response.configuracoes.apelido,
         nome: '',
-        email: response.user.email,
-        uid: response.user.uid,
-        apiKey: response.user.apiKey
+        email: response.auth.email,
+        uid: response.auth.uid,
+        apiKey: response.auth.apiKey,
+        foto: response.configuracoes.foto,
+        dizimista: response.configuracoes.dizimista,
+        id_pessoa: response.configuracoes.id_pessoa,
+        itens_menu: response.configuracoes.itens_menu,
       }
       appDispatch({ type: 'HANDLE_LOGIN', isSignedIn: response.result });
       loginDispatch({ type: 'LOGIN', loginState: user });

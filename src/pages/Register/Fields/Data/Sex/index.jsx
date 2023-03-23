@@ -9,7 +9,7 @@ function Sex() {
   const value = registerState.dados.idSexo;
 
   useEffect(() => {
-    registerDispatch({ type: 'HANDLE_VALID', stepValid: true });
+    isValid(value);
   }, []);
 
   const isValid = useCallback((value) => {

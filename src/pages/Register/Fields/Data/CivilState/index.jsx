@@ -29,7 +29,12 @@ function CivilState() {
 
   const handleChildrens = useCallback((event) => {
     let newValue = event.target.value;
-    if (newValue === 'true') newValue = childrens === "0" ? 1 : childrens;
+    if (newValue === 'true') {
+      console.log(childrens);
+      newValue = (childrens === "0" || childrens === 0) ? 1 : childrens;
+      console.log(newValue);
+    } 
+      
     registerDispatch({ type: 'HANDLE_CHILDREN', filhos: newValue})
   }, []);
 

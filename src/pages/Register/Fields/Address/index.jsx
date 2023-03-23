@@ -6,7 +6,7 @@ import InputMask from "react-input-mask";
 import { firstLetterUpper } from '../../../../services/firstLetterUpper.js';
 
 function Address() {
-  const { appState } = useContext(AppContext);
+  const { appState, appDispatch } = useContext(AppContext);
   const { registerState, registerDispatch, searchAddress } = useContext(RegisterContext);
   const [stepValid, setStepValid] = useState({
     cep: null,
@@ -28,6 +28,10 @@ function Address() {
   };
 
   const value = registerState.endereco;
+
+  useEffect(() => {
+    appDispatch({ type: 'HANDLE_ALERT', alert: 0 });
+  }, []);
 
   useEffect(() => {
     isStepValid();

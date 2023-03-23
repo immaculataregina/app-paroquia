@@ -11,7 +11,7 @@ import MuiDialog from '../../components/MuiDialog';
 import { AppContext } from '../../contexts/AppContext';
 
 export default function Home() {
-  const { logout } = useContext(LoginContext);
+  const { logout, loginState } = useContext(LoginContext);
   const { appDispatch } = useContext(AppContext);
 
   const [imageCrop, setImageCrop] = useState(false);
@@ -32,23 +32,32 @@ export default function Home() {
   }, []);
 
   const modules = useMemo(() => {
-    const modulesPermission = [
-      {
-        nome: 'Avisos',
-        slug: 'avisos',
-        icon: 'Notifications'
-      },
-      {
-        nome: 'Dízimo',
-        slug: 'dizimo',
-        icon: 'VolunteerActivism'
-      },
-      {
-        nome: 'Missa e Atendimentos',
-        slug: 'horarios',
-        icon: 'Church'
-      },
-    ]
+    const tempItensMenu = loginState.itens_menu || ["Pessoas", "Dízimo", "Eventos"];
+    
+    const modulesPermission = tempItensMenu.map(item => {
+      switch (item) {
+        case 'Pessoas':
+          return {
+            nome: item,
+            slug: 'pessoas',
+            icon: 'Notifications'
+          }
+        case 'Dízimo':
+          return {
+            nome: item,
+            slug: 'dizimo',
+            icon: 'VolunteerActivism'
+          }
+        case 'Eventos':
+          return {
+            nome: item,
+            slug: 'eventos',
+            icon: 'Church'
+          }
+        default:
+          break;
+      }
+    })
 
     return (
       <>

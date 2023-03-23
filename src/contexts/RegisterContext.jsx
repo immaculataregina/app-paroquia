@@ -223,9 +223,12 @@ export function RegisterContextProvider({ children }) {
 
   const verifyCpf = useCallback(async (cpf) => {
     appDispatch({ type: 'HANDLE_LOADING', loading: true });
-    await api.pessoas.verifyCpf(cpf);
+    const response = await api.pessoas.verifyCpf(cpf);
     appDispatch({ type: 'HANDLE_LOADING', loading: false });
+
+    return response;
   }, []);
+
 
   const signUpUser = useCallback(async () => {
     appDispatch({ type: 'HANDLE_LOADING', loading: true });
@@ -239,8 +242,9 @@ export function RegisterContextProvider({ children }) {
       termo: registerState.termo
     }
     
-    await api.pessoas.signUpUser(body);
+    const response = await api.pessoas.signUpUser(body);
     appDispatch({ type: 'HANDLE_LOADING', loading: false });
+    return response;
   })
 
   return (

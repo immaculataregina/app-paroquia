@@ -13,14 +13,22 @@ import { CPF, Name, Surname, Birthday, CivilState, Sex } from './Fields/Data';
 import { Phone, Email } from './Fields/Contact';
 import Password from './Fields/Password';
 import Address from './Fields/Address';
+import MuiSnackbar from '../../components/MuiSnackbar';
 
 function Register () {
   const router = useRouter();
   const { match, history } = router;
-  const { appState } = useContext(AppContext);
+  const { appState, appDispatch } = useContext(AppContext);
   const { registerState, verifyCpf, signUpUser } = useContext(RegisterContext);
 
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState('error');
+
   const uri = history.location.pathname;
+
+  useEffect(() => {
+    appDispatch({ type: 'HANDLE_ALERT', alert: 0 });
+  }, []);
 
   const steps = useMemo(() => ([
     { path: `${match.path}/cpf`, component: CPF, verificaCpf: true },
@@ -58,13 +66,22 @@ function Register () {
   const goToNextStep = async () => {
     let validCpf = false;
     if (currentPositionStep === steps.length -1) {
-      await signUpUser(registerState.dados.cpf);
-      history.push("/?cadastro");
+      const res = await signUpUser(registerState.dados.cpf);
+      if (res.error) {
+        console.error(res.error);
+        setAlertType('error');
+        setAlertMessage("Ocorreu um erro com o servidor. Tente novamente mais tarde!");
+        appDispatch({ type: 'HANDLE_ALERT', alert: 1 });
+      } else {
+        appDispatch({ type: 'HANDLE_ALERT', alert: 0 });
+        // history.push("/?cadastro");
+      }
       return;
     };
 
     if (steps[currentPositionStep].verificaCpf) {
       validCpf = await verifyCpf(registerState.dados.cpf);
+
       if(!validCpf)
         return;
     }
@@ -108,7 +125,7 @@ function Register () {
         <Switch>
           {currentStep().path && (
             <Route path={currentStep().path} exact>
-              {steps.map((step) => <RouteWithSubRoutes key={step.path} {...step} />)}
+              {steps.map((step) => <RouteWithSubRoutes {...step} />)}
               <Button
                 disabled={registerState.stepValid !== true || appState.loading}
                 size="large"
@@ -122,6 +139,7 @@ function Register () {
             </Route>
           )}
         </Switch>
+        <MuiSnackbar message={alertMessage} type={alertType} />
       </div>
     </>
   );

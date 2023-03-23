@@ -1,4 +1,4 @@
-import { loginUser } from "./api-autenticacao"
+import { loginUser, getData } from "./api-autenticacao"
 import { searchAddressByCep } from "./endpoint-endereco"
 import { verifyCpf, signUpUser } from "./api-pessoas"
 /**
@@ -6,7 +6,8 @@ import { verifyCpf, signUpUser } from "./api-pessoas"
  */
 export const api = {
   autenticacao: {
-    loginUser
+    loginUser,
+    getData
   },
   endereco: {
     searchAddressByCep

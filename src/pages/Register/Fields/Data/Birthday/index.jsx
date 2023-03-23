@@ -1,11 +1,19 @@
 import { TextField } from "@mui/material";
 import InputMask from 'react-input-mask';
-import { memo, useCallback, useContext, useState, useMemo } from "react";
+import { memo, useCallback, useContext, useState, useMemo, useEffect } from "react";
 import { RegisterContext } from "../../../../../contexts/RegisterContext";
 
 function Birthday() {
   const { registerState, registerDispatch } = useContext(RegisterContext);
   const [stepValid, setStepValid] = useState(null);
+
+  useEffect(() => {
+    if(!value)
+      registerDispatch({ type: 'HANDLE_VALID', stepValid: false });
+    else {
+      registerDispatch({ type: 'HANDLE_VALID', stepValid: true });
+    }
+  }, []);
 
   const value = useMemo(() => {
     if (registerState.dados.dtNascimento) {
