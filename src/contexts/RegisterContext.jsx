@@ -23,11 +23,11 @@ const initialValue = {
       cep: '',
       estado: '',
       cidade: '',
-      idCidade: '',
       bairro: '',
       logradouro: '',
       numero: '',
-      complemento: ''
+      complemento: '',
+      ibge: '',
     },
     vinculo: {
       idPastoral: null
@@ -39,7 +39,7 @@ const initialValue = {
     },
     usuario: {
       senha: '',
-      idsFuncionalidades: {},
+      idsFuncionalidades: '',
     },
     termo: {
       idTermo: 1,
@@ -149,7 +149,8 @@ const registerReducer = (state, action) => {
           bairro: action.bairro,
           logradouro: action.logradouro,
           numero: action.numero,
-          complemento: action.complemento
+          complemento: action.complemento,
+          ibge: action.ibge
         }
       }
     case 'HANDLE_PHONE':
@@ -215,6 +216,7 @@ export function RegisterContextProvider({ children }) {
         cidade: response.data.localidade,
         bairro: response.data.bairro,
         logradouro: response.data.logradouro,
+        ibge: response.data.ibge
       })
     }
 

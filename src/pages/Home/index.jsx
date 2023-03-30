@@ -44,8 +44,8 @@ export default function Home() {
           }
         case 'Dízimo':
           return {
-            nome: item,
-            slug: 'dizimo',
+            nome: loginState.dizimista ? item : 'Quero Ser Dizimista',
+            slug: loginState.dizimista ? 'dizimo' : 'quero-ser-dizimista',
             icon: 'VolunteerActivism'
           }
         case 'Eventos':
@@ -64,7 +64,7 @@ export default function Home() {
         {modulesPermission.map(module => {
           return (
             <a 
-              href="#"
+              href={module.slug}
               style={{ 
                 display: 'flex', flexDirection: 'column', alignItems: 'center',
                 padding: '5vmin 4vmin 4vmin', color: '#414141', textAlign: 'center', textDecoration: 'none', overflow: 'hidden'

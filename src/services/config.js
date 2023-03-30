@@ -8,3 +8,7 @@ export const API_AUTENTICACAO_CONFIG = {
 export const API_PESSOAS_CONFIG = {
   BASE_URL: import.meta.env.VITE_API_URL_PESSOAS
 }
+
+export const API_DIZIMO_CONFIG = {
+  BASE_URL: import.meta.env.VITE_API_URL_DIZIMO
+}

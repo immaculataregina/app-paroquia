@@ -4,9 +4,15 @@ import { AppBar, IconButton, InputBase, Toolbar, Typography } from '@mui/materia
 import * as Icons from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 
+
 import { theme } from '../../App';
+import useRouter from '../../services/hooks/useRouter';
 
 export default function Header(props) {
+
+  const router = useRouter();
+
+  const { history } = router;
 
   const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -60,6 +66,7 @@ export default function Header(props) {
             edge="start"
             color="inherit"
             aria-label="menu"
+            onClick={() => history.goBack()}
             sx={{ mr: 2 }}
           >
             <Icons.ArrowBack />
@@ -68,19 +75,21 @@ export default function Header(props) {
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, fontSize: '1.2em'}}
+            sx={{ flexGrow: 2, fontSize: '1.2em'}}
           >
             {props.title}
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <Icons.Search />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Pesquisar..."
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+          {!props.noSearch && (
+            <Search>
+              <SearchIconWrapper>
+                <Icons.Search />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Pesquisar..."
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+          )}
         </Toolbar>
       </AppBar>
       <div

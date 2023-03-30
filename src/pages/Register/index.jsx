@@ -74,7 +74,7 @@ function Register () {
         appDispatch({ type: 'HANDLE_ALERT', alert: 1 });
       } else {
         appDispatch({ type: 'HANDLE_ALERT', alert: 0 });
-        // history.push("/?cadastro");
+        history.push("/?cadastro");
       }
       return;
     };

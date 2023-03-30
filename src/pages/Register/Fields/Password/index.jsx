@@ -33,7 +33,7 @@ export default function Password() {
       setStepValid(false)
       registerDispatch({ type: 'HANDLE_VALID', stepValid: false });
     }
-  }, [confirmPassword]);
+  }, [confirmPassword, stepValid]);
 
   const handleInput = useCallback((event) => {
     let newValue = event.target.value;

@@ -6,6 +6,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': 'https://pagseguro.uol.com.br',
     'Access-Control-Allow-Methods': 'DELETE, POST, PUT, GET, OPTIONS',
     'Access-Control-Max-Age': 86400,
     'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
